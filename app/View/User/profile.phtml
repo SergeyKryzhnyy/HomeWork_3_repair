@@ -1,0 +1,19 @@
+profile
+<br>
+<?php
+/** @var  \App\Model\User $user */
+$user = $this->user;
+
+//var_dump($this->user);
+?>
+
+
+<?php
+if ($user): ?>
+name: <?= $user->getName() ?>
+
+
+<?php else: ?>
+Пользователь не найден
+
+<?php endif; ?>

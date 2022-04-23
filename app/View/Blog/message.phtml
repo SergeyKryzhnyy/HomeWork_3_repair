@@ -1,0 +1,52 @@
+
+
+
+
+Последние посты
+<br>
+<br>
+<br>
+
+<?php
+for ($i=0;$i<20;$i++)
+{
+    if (!$this->posts->getIdMessage($i))
+    {
+        break;
+    }
+    echo "id поста:" . $this->posts->getIdMessage($i); echo "<br>";
+    echo "Пост:" . $this->posts->getText($i); echo "<br>";
+    echo "Автор:" . $this->posts->getNameUser($i); echo "<br>";
+
+    ?>
+
+        <?php if ($_SESSION['id']==ADMIN_ID)
+        {?>
+            <form method="POST">
+            <input type="hidden" name="id" value="<?=$this->posts->getIdMessage($i)?>" />
+            <input type="submit"  value="удалить" />
+            </form><?php
+        }
+        ?>
+
+
+    <?php
+
+
+    echo "<br>";echo "<br>";echo "<br>";
+
+}
+
+
+?>
+
+<form method="POST" action="/blog/index">
+    <input type="hidden" name="id"/>
+    <input type="submit"  value="Добавить пост" />
+</form>
+
+
+
+
+
+
