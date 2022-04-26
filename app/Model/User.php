@@ -43,6 +43,7 @@ class User extends AbstractModel
         return $this->email = $email;
     }
 
+
     public function getEmail()
     {
         return $this->email;
@@ -80,6 +81,18 @@ class User extends AbstractModel
         }
         return new self($data);
     }
+
+    public static function getStringNameById(int $id): string
+    {
+        $db = Db::getInstance();
+        $select = "SELECT name FROM users WHERE id = $id";
+        $data = $db->fetchOne($select, __METHOD__);
+
+        return $data['name'];
+    }
+
+
+
 
     public static function getByEmail(string $email): ?self
     {

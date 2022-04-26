@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3307
--- Время создания: Апр 24 2022 г., 00:14
--- Версия сервера: 5.7.33
+-- Время создания: Апр 26 2022 г., 10:40
+-- Версия сервера: 8.0.24
 -- Версия PHP: 7.4.27
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -24,39 +24,14 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `posts`
---
-
-CREATE TABLE `posts` (
-  `id_message` int(5) NOT NULL,
-  `text` text CHARACTER SET utf8 NOT NULL,
-  `id_user` int(5) NOT NULL,
-  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Дамп данных таблицы `posts`
---
-
-INSERT INTO `posts` (`id_message`, `text`, `id_user`, `date`) VALUES
-(2, 'post1', 5, '2022-04-22 21:13:11'),
-(13, 'post3', 2, '2022-04-23 10:53:18'),
-(14, 'post3', 2, '2022-04-23 10:53:22'),
-(21, '12312312', 70, '2022-04-23 17:38:20'),
-(22, '', 70, '2022-04-23 22:53:54'),
-(23, '', 70, '2022-04-23 22:56:08');
-
--- --------------------------------------------------------
-
---
 -- Структура таблицы `users`
 --
 
 CREATE TABLE `users` (
-  `id` int(2) NOT NULL,
-  `name` varchar(50) CHARACTER SET utf8 NOT NULL,
-  `email` varchar(50) CHARACTER SET utf8 NOT NULL,
-  `password` varchar(50) CHARACTER SET utf8 NOT NULL,
+  `id` int NOT NULL,
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `email` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `password` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `date_register` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -74,12 +49,6 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `date_register`) VALUES
 --
 
 --
--- Индексы таблицы `posts`
---
-ALTER TABLE `posts`
-  ADD PRIMARY KEY (`id_message`);
-
---
 -- Индексы таблицы `users`
 --
 ALTER TABLE `users`
@@ -91,16 +60,10 @@ ALTER TABLE `users`
 --
 
 --
--- AUTO_INCREMENT для таблицы `posts`
---
-ALTER TABLE `posts`
-  MODIFY `id_message` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
-
---
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

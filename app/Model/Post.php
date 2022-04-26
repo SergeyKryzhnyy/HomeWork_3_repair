@@ -9,17 +9,9 @@ class Post extends AbstractModel
    public $idMessage;
    public $text;
    public $idUser;
-    public $nameUser;
+   public $nameUser;
    public $data;
-
-//    public function __construct($data = [])
-//    {
-//        if ($data) {
-//            $this->idMessage = $data['idMessage'];
-//            $this->text = $data['text'];
-//            $this->idUser = $data['idUser'];
-//        }
-//    }
+   public $image;
 
     public function getIdMessage($int)
     {
@@ -51,11 +43,25 @@ class Post extends AbstractModel
         return $this->idUser = $idUser;
     }
 
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+public function LoadFile(string $file)
+{
+    if (file_exists($file))
+    {
+        $this->image = $this->genFileName();
+        move_uploaded_file($file, getcwd() . '/images/' . $this->image );
+    }
+}
+
     public function savePost($post, $id_user)//сохраняем пост
     {
         $db = Db::getInstance();
-        $insert = "INSERT INTO posts (`text`, `id_user`) VALUES (:post,:id_user)";
-        $db->exec($insert, __METHOD__, [':post'=>$post, ':id_user'=>$id_user]);
+        $insert = "INSERT INTO posts (`text`, `id_user`, `image`) VALUES (:post,:id_user, :image)";
+        $db->exec($insert, __METHOD__, [':post'=>$post, ':id_user'=>$id_user, ':image'=>$this->image]);
         $id = $db->lastInsertId();
         $this->id = $id;
         return $id;
@@ -64,7 +70,7 @@ class Post extends AbstractModel
     public function showAllPosts()
     {
         $db = Db::getInstance();
-        $select = "SELECT name, text, id_message FROM users JOIN posts ON users.id = posts.id_user";
+        $select = "SELECT name, text, id_message, image FROM users JOIN posts ON users.id = posts.id_user";
         $data = $db->fetchAll($select, __METHOD__);
         $i=0;
 
@@ -73,8 +79,10 @@ class Post extends AbstractModel
             $this->nameUser[$i] = $value['name'];
             $this->text[$i] = $value['text'];
             $this->idMessage[$i] = $value['id_message'];
+            $this->image[$i] = $value['image'];
             $i++;
         }
+
         for ($i=0;$i<20;$i++)
         {
             $array[$i] = 'id:'  . $this->idMessage[$i] . "<br>" .  $this->text[$i] . "<br>" . "Автор-"  . $this->nameUser[$i];
@@ -89,8 +97,9 @@ class Post extends AbstractModel
     public function getAllMessages($user_id)
     {
         $db = Db::getInstance();
-        $select = "SELECT `date`, id_message, text FROM posts WHERE id_user=:user_id ORDER BY `date`";
+        $select = "SELECT * FROM posts WHERE id_user=:user_id ORDER BY `date`";
         $rows = $db->fetchAll($select, __METHOD__,[':user_id'=>$user_id]);
+        //var_dump($rows);
         return $rows;
     }
 
@@ -99,5 +108,11 @@ class Post extends AbstractModel
         $db = Db::getInstance();
         $insert = "DELETE FROM posts WHERE id_message=:i";
         $db->exec($insert, __METHOD__,[':i'=>$i]);
+    }
+
+    private function genFileName()
+    {
+        $str = sha1(microtime(1) . mt_rand(1,1000)) . '.jpg';
+        return  $str;
     }
 }

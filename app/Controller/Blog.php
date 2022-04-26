@@ -8,8 +8,6 @@ use Src\AbstractController;
 class Blog extends AbstractController
 {
     private $posts;
-
-
     public function indexAction()
     {
        if (!$this->user)
@@ -18,6 +16,5 @@ class Blog extends AbstractController
        }
         return $this->view->render('blog/index.phtml', ['user'=>$this->user]);
     }
-
 
 }

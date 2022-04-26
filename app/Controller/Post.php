@@ -15,9 +15,15 @@ class Post extends AbstractController
     {
         $post = $this->text = $_POST['post'];
         $user = new PostModel();
+
+        if (isset($_FILES['image']['tmp_name']))
+        {
+            $user->LoadFile($_FILES['image']['tmp_name']);
+        }
+
         $db = Db::getInstance();
         $user->savePost($post, $_SESSION['id']);
-        $this->redirect('/blog/index');
+        $this->redirect('/show/index');
         //return $this->view->render('User/register.phtml', ['user'=>UserModel::getById((int) $_GET['id'])]);
     }
 
