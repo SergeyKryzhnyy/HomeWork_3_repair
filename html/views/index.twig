@@ -1,0 +1,19 @@
+вы вошли, как {{ array.name }}
+<form action="/user/logout">
+    <input type="submit" value="Выйти">
+</form>
+<br><br><br><br><br><br>
+
+<form action="/post/sent" enctype="multipart/form-data" method="post">
+    введите новый пост: <input type="text" size="40" name="post">
+    <input name="image" type="file">
+    <input type="submit" value="Отправить">
+</form>
+
+<br><br><br><br><br><br>
+
+
+<form method="POST" action="/show/index">
+    <input type="hidden" name="id"/>
+    <input type="submit"  value="Смотреть всю ленту" />
+</form>

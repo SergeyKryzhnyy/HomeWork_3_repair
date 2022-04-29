@@ -8,6 +8,7 @@ class User extends AbstractController
 {
     public function loginAction()
     {
+        $twig =  $this->view->getTwig();
         $email = trim($_POST['email']);
         if(isset($_POST['email']))
         {
@@ -34,7 +35,14 @@ class User extends AbstractController
             }
         }
 
-        return $this->view->render('User/register.phtml', ['user'=>UserModel::getById((int) $_GET['id'])]);
+        if (TWIG_VIEW == 1)
+        {
+            echo $twig->render('login.twig', ['user'=>UserModel::getById((int) $_GET['id'])]);
+        }
+        else{
+            return $this->view->render('User/register.phtml', ['user'=>UserModel::getById((int) $_GET['id'])]);
+        }
+        return '';
     }
 
     public function registerAction()
@@ -43,9 +51,8 @@ class User extends AbstractController
         $email = trim($_POST['email']);
         $password = $_POST['password'];
         $passwordRepeat = $_POST['password_repeat'];
-
         $success = true;
-
+        $twig =  $this->view->getTwig();
         if(isset($_POST['email']))
         {
             if (!$name)
@@ -66,8 +73,6 @@ class User extends AbstractController
                 $success = false;
             }
 
-            //$success = true;
-
             $user = UserModel::getByEmail($email);
             if ($user)
             {
@@ -87,7 +92,14 @@ class User extends AbstractController
                 $this->redirect('/blog/index');
             }
         }
-        return $this->view->render('User/register.phtml', ['user'=>UserModel::getById((int) $_GET['id'])]);
+        if (TWIG_VIEW == 1)
+        {
+            echo $twig->render('login.twig', ['user'=>UserModel::getById((int) $_GET['id'])]);
+        }
+        else{
+            return $this->view->render('User/register.phtml', ['user'=>UserModel::getById((int) $_GET['id'])]);
+        }
+        return '';
     }
 
     public function profileAction()

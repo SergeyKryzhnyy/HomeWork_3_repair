@@ -1,11 +1,17 @@
 <?php
 namespace Src;
 
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
+
+//require_once __DIR__.'../vendor/autoload.php';
+
+
 class View
 {
     private $templatePath = '';
     private $data = [];
-
+    public $twig;
     public function __construct()
     {
         $this->templatePath = PROJECT_ROOD_DIR . DIRECTORY_SEPARATOR . 'app/View';
@@ -28,5 +34,12 @@ class View
     public function assign(string $name, $value)
     {
         $this->data[$name] = $value;
+    }
+
+    public function getTwig()
+    {
+        $loader = new FilesystemLoader('../html/views');
+        $this->twig = new Environment($loader);
+        return $this->twig;
     }
 }

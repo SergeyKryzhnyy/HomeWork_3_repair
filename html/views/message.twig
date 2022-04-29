@@ -1,0 +1,33 @@
+вы вошли, как {{ array.name }}
+<form action="/user/logout">
+    <input type="submit" value="Выйти">
+</form>
+<br>
+<h1>Последние посты</h1>
+
+
+
+{% for i in 0..array.text|length-1 %}
+
+    <br>{{ array.text[i] }}
+    <br>Автор: {{ array.name_user[i] }}
+
+    {% if array.image %}
+        <img src="/images/{{ array.image[i] }}" >
+    {% endif %}
+
+
+
+
+    {% if array.id == 1 %}
+        <form method="POST">
+            <input type="hidden" name="id" value="{{ array.id_post[i] }}" />
+            <input type="submit"  value="удалить" />
+        </form>
+    {% endif %}
+{% endfor %}
+
+<form method="POST" action="/blog/index">
+    <input type="hidden" name="id"/>
+    <input type="submit"  value="Добавить пост" />
+</form>

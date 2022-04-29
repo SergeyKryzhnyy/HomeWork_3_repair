@@ -6,3 +6,5 @@ define('DB_NAME', 'users');
 define('DB_USER', 'admin');
 define('DB_PASSWORD', '12345');
 define('ADMIN_ID','70');
+
+define('TWIG_VIEW','1');
