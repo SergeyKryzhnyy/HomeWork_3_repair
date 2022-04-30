@@ -13,6 +13,7 @@ class Blog extends AbstractController
     private $posts;
     public function indexAction()
     {
+
        if (!$this->user)
        {
            $this->redirect('/user/register');

@@ -1,6 +1,7 @@
 <?php
 namespace App\Model;
 
+use Intervention\Image\ImageManagerStatic as Image;
 use Src\AbstractModel;
 use Src\Db;
 
@@ -48,15 +49,17 @@ class Post extends AbstractModel
         return $this->image;
     }
 
-public function LoadFile(string $file)
+public function LoadFile($file)
 {
     if (file_exists($file))
     {
+        $img = Image::make($file);
+        $img->fit(500,500);
+        $img->text('Hello',10,10);
         $this->image = $this->genFileName();
-        move_uploaded_file($file, getcwd() . '/images/' . $this->image );
+        $img->save(getcwd() . '/images/' . $this->image);
     }
 }
-
     public function savePost($post, $id_user)//сохраняем пост
     {
         $db = Db::getInstance();

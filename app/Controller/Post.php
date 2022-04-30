@@ -5,6 +5,12 @@ use Src\AbstractController;
 use \App\Model\Post as PostModel;
 use Src\Db;
 
+
+require_once '../vendor/autoload.php';
+use Intervention\Image\ImageManagerStatic as Image;
+
+
+
 class Post extends AbstractController
 {
     private $text;
@@ -13,6 +19,7 @@ class Post extends AbstractController
 
     public function sentAction()
     {
+
         $post = $this->text = $_POST['post'];
         $user = new PostModel();
 
