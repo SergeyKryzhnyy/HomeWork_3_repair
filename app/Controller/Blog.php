@@ -1,7 +1,7 @@
 <?php
 namespace App\Controller;
 
-use App\Model\Post as PostModel;
+use App\Model\Posts as PostModel;
 use App\Model\User as UserModel;
 use Src\AbstractController;
 

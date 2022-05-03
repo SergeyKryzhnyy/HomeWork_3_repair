@@ -5,6 +5,7 @@
   "require": {
     "ext-pdo": "*",
     "twig/twig": "^3.3",
-    "intervention/image": "^2.7"
+    "intervention/image": "^2.7",
+    "illuminate/database": "5.8.30"
   }
 }

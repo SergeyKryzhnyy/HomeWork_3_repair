@@ -1,27 +1,22 @@
 <?php
 namespace App\Model;
+use Illuminate\Database\Eloquent\Model;
 
-use Src\AbstractModel;
-use Src\Db;
-
-class User extends AbstractModel
+use Illuminate\Database\Capsule\Manager as DB;
+class User extends Model
 {
-    const GENDER_MALE = 0;
-    const GENDER_FEMALE = 1;
+
+
+
+    protected $table = 'users';
 
     private $id;
     private $name;
     private $email;
     private $password;
 
-    public function __construct($data = [])
+    public function __construct()
     {
-        if ($data) {
-            $this->id = $data['id'];
-            $this->email = $data['email'];
-            $this->name = $data['name'];
-            $this->password = $data['password'];
-        }
     }
     public function getId():int
     {
@@ -59,27 +54,30 @@ class User extends AbstractModel
         return $this->password;
     }
 
-    public function save()//сохраняем нового юзера
-    {
-        $db = Db::getInstance();
-        $insert = "INSERT INTO users (`name`, `email`, `password`) VALUES (:name, :email, :password)";
-        $db->exec($insert, __METHOD__, [':name'=>$this->name, ':email'=>$this->email, ':password'=>self::getPasswordHash($this->password)]);
-        $id = $db->lastInsertId();
-        $this->id = $id;
-        return $id;
-    }
+//    public function save()//сохраняем нового юзера
+//    {
+//        $db = Db::getInstance();
+//        $insert = "INSERT INTO users (`name`, `email`, `password`) VALUES (:name, :email, :password)";
+//        $db->exec($insert, __METHOD__, [':name'=>$this->name, ':email'=>$this->email, ':password'=>self::getPasswordHash($this->password)]);
+//        $id = $db->lastInsertId();
+//        $this->id = $id;
+//        return $id;
+//    }
 
-    public static function getById(int $id): ?self
+    public function getById(int $id): ?self
     {
-        $db = Db::getInstance();
-        $select = "SELECT * FROM users WHERE id = $id";
-        $data = $db->fetchOne($select, __METHOD__);
-
-        if(!$data)
+        Database::getConn();
+        $users = DB::table('users')->where('id','=',$id)->get();
+        foreach ($users as $user)
+        {
+            $data = $user->name;
+        }
+        if(!$users)
         {
             return null;
         }
-        return new self($data);
+        return new self($users);
+
     }
 
     public static function getStringNameById(int $id): string
