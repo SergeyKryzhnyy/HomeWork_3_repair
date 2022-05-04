@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Model\Posts;
+use App\Model\User as UserModel;
 use Src\AbstractController;
 
 class Show extends AbstractController
@@ -23,6 +24,7 @@ class Show extends AbstractController
         $twig =  $this->view->getTwig();
         if (TWIG_VIEW == 1)
         {
+            $result['name'] = UserModel::getName($_SESSION['id']);
             echo $twig->render('message.twig', ['array'=>$result, 'id_status'=>$id_status]);
         }
         else

@@ -13,7 +13,7 @@ class Blog extends AbstractController
     private $posts;
     public function indexAction()
     {
-
+        $email = trim($_POST['email']);
        if (!$this->user)
        {
            $this->redirect('/user/register');
@@ -21,7 +21,7 @@ class Blog extends AbstractController
 
        $twig =  $this->view->getTwig();
 
-        $array['name'] = $this->user->getName();
+        $array['name'] = UserModel::getName($_SESSION['id']);
         if (TWIG_VIEW == 1)
         {
             echo $twig->render('index.twig', ['array'=>$array]);

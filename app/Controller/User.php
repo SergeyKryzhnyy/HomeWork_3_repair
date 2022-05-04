@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Model\Database;
 use Src\AbstractController;
 use \App\Model\User as UserModel;
 
@@ -8,8 +9,11 @@ class User extends AbstractController
 {
     public function loginAction()
     {
+        $user = new UserModel();
         $twig =  $this->view->getTwig();
         $email = trim($_POST['email']);
+        Database::getConn();
+
         if(isset($_POST['email']))
         {
             if($email)
@@ -22,18 +26,47 @@ class User extends AbstractController
                 }
                 if($user)
                 {
-                    if ($user->getPassword() != UserModel::getPasswordHash($password))
+                    if (UserModel::getPassword($email) != UserModel::getPasswordHash($password))
                     {
                         $this->view->assign('error','пароль не подошел!');
                     }
                     else
                     {
-                        $_SESSION['id'] = $user->getId();
+                        $_SESSION['id'] = UserModel::getId($email);
                         $this->redirect('/blog/index');
                     }
                 }
+
+
             }
+
         }
+
+
+//        if(isset($_POST['email']))
+//        {
+//            if($email)
+//            {
+//                $password = $_POST['password'];
+//                $user = UserModel::getByEmail($email);
+//                if (!$user)
+//                {
+//                    $this->view->assign('error','Пользователь на найден');
+//                }
+//                if($user)
+//                {
+//                    if ($user->getPassword() != UserModel::getPasswordHash($password))
+//                    {
+//                        $this->view->assign('error','пароль не подошел!');
+//                    }
+//                    else
+//                    {
+//                        $_SESSION['id'] = $user->getId();
+//                        $this->redirect('/blog/index');
+//                    }
+//                }
+//            }
+//        }
 
         if (TWIG_VIEW == 1)
         {
@@ -72,26 +105,21 @@ class User extends AbstractController
                 $this->view->assign('error','Пароли не совпадают');
                 $success = false;
             }
-
-            $user = UserModel::getByEmail($email);
-            if ($user)
+            $user1 = UserModel::getByEmail($email);
+            if ($user1)
             {
                 $this->view->assign('error','Такой email уже зарегистрирован!');
                 $success = false;
             }
+
             if($success)
             {
-                $user = new UserModel();
-                $user->setName($name);
-                $user->setEmail($email);
-                $user->setPassword($password);
 
-                $userId = $user->save();
-                $_SESSION['id'] = $user->getId();
-                $this->setUser($user);
+                UserModel::saveUser($name, $email, $password);
                 $this->redirect('/blog/index');
             }
         }
+
         if (TWIG_VIEW == 1)
         {
             echo $twig->render('login.twig', ['user'=>UserModel::getById((int) $_GET['id'])]);

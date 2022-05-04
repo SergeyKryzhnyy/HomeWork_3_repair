@@ -9,6 +9,8 @@ class User extends Model
 
 
     protected $table = 'users';
+    public $timestamps = false;
+    public $primaryKey = 'id';
 
     private $id;
     private $name;
@@ -18,14 +20,34 @@ class User extends Model
     public function __construct()
     {
     }
-    public function getId():int
+    public static function getId($email)
     {
-        return $this->id;
+        Database::getConn();
+        $data = DB::table('users')->where('email','=',$email)->get();
+        foreach ($data as $user)
+        {
+            $data = $user->id;
+        }
+        if(!$data)
+        {
+            return null;
+        }
+        return $data;
     }
 
-    public function getName():string
+    public static function getName($id)
     {
-        return $this->name;
+        Database::getConn();
+        $data = DB::table('users')->where('id','=',$id)->get();
+        foreach ($data as $user)
+        {
+            $data = $user->name;
+        }
+        if(!$data)
+        {
+            return null;
+        }
+        return $data;
     }
 
     public function setName(string $name)
@@ -49,9 +71,29 @@ class User extends Model
         return $this->password = $password;
     }
 
-    public function getPassword()
+    public static function getPassword($email)
     {
-        return $this->password;
+        Database::getConn();
+        $data = DB::table('users')->where('email','=',$email)->get();
+        foreach ($data as $user)
+        {
+            $data = $user->password;
+        }
+        if(!$data)
+        {
+            return null;
+        }
+        return $data;
+    }
+
+    public static function saveUser($name, $email, $password)
+    {
+        Database::getConn();
+        $db = new User;
+        $db->name = $name;
+        $db->email = $email;
+        $db->password = $password;
+        $db->save();
     }
 
 //    public function save()//сохраняем нового юзера
@@ -64,19 +106,20 @@ class User extends Model
 //        return $id;
 //    }
 
-    public function getById(int $id): ?self
+    public static function getById($id)
     {
         Database::getConn();
         $users = DB::table('users')->where('id','=',$id)->get();
         foreach ($users as $user)
         {
             $data = $user->name;
+            //$data['password'] = $user->password;
         }
         if(!$users)
         {
             return null;
         }
-        return new self($users);
+        return $data;
 
     }
 
@@ -92,17 +135,15 @@ class User extends Model
 
 
 
-    public static function getByEmail(string $email): ?self
+    public static function getByEmail($email):string
     {
-        $db = Db::getInstance();
-        $select = "SELECT * FROM users WHERE `email`=:email";
-        $data = $db->fetchOne($select, __METHOD__,[':email'=>$email]);
-
-        if(!$data)
+        Database::getConn();
+        $data = DB::table('users')->where('email','=', $email)->get();
+        foreach ($data as $user)
         {
-            return null;
+            $data = $user->email;
         }
-        return new self($data);
+        return $data;
 
     }
 

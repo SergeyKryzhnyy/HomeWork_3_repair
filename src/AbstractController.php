@@ -25,7 +25,7 @@ abstract class AbstractController
     /**
      * @param User $user
      */
-    public function setUser(User $user): void
+    public function setUser($user)
     {
         $this->user = $user;
     }
