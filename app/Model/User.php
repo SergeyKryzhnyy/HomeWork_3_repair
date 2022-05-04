@@ -10,16 +10,11 @@ class User extends Model
 
     protected $table = 'users';
     public $timestamps = false;
-    public $primaryKey = 'id';
+  //  public $primaryKey = 'id';
 
-    private $id;
-    private $name;
-    private $email;
-    private $password;
 
-    public function __construct()
-    {
-    }
+
+
     public static function getId($email)
     {
         Database::getConn();
@@ -86,13 +81,13 @@ class User extends Model
         return $data;
     }
 
-    public static function saveUser($name, $email, $password)
+    public static function saveUser()
     {
         Database::getConn();
         $db = new User;
-        $db->name = $name;
-        $db->email = $email;
-        $db->password = $password;
+        $db->name= $_POST['name'];
+        $db->email = $_POST['email'];
+        $db->password = User::getPasswordHash($_POST['password']);
         $db->save();
     }
 
@@ -146,6 +141,22 @@ class User extends Model
         return $data;
 
     }
+
+    public static function getByAll($email)
+    {
+        Database::getConn();
+        $data = DB::table('users')->where('email','=', $email)->get();
+        foreach ($data as $user)
+        {
+            $data['id'] = $user->id;
+            $data['name'] = $user->name;
+            $data['password'] = $user->password;
+            $data['email'] = $user->email;
+        }
+        return $data;
+
+    }
+
 
     public static function getPasswordHash(string $password)
     {

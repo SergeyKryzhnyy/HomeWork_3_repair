@@ -12,6 +12,7 @@ class User extends AbstractController
         $user = new UserModel();
         $twig =  $this->view->getTwig();
         $email = trim($_POST['email']);
+        $message = '';
         Database::getConn();
 
         if(isset($_POST['email']))
@@ -23,54 +24,29 @@ class User extends AbstractController
                 if (!$user)
                 {
                     $this->view->assign('error','Пользователь на найден');
+                    $message = 'Пользователь на найден';
                 }
                 if($user)
                 {
                     if (UserModel::getPassword($email) != UserModel::getPasswordHash($password))
                     {
                         $this->view->assign('error','пароль не подошел!');
+                        $message = 'Пароль  не подошел';
                     }
                     else
                     {
+                        $message = "регистрация успешна";
                         $_SESSION['id'] = UserModel::getId($email);
                         $this->redirect('/blog/index');
                     }
                 }
-
-
             }
 
         }
 
-
-//        if(isset($_POST['email']))
-//        {
-//            if($email)
-//            {
-//                $password = $_POST['password'];
-//                $user = UserModel::getByEmail($email);
-//                if (!$user)
-//                {
-//                    $this->view->assign('error','Пользователь на найден');
-//                }
-//                if($user)
-//                {
-//                    if ($user->getPassword() != UserModel::getPasswordHash($password))
-//                    {
-//                        $this->view->assign('error','пароль не подошел!');
-//                    }
-//                    else
-//                    {
-//                        $_SESSION['id'] = $user->getId();
-//                        $this->redirect('/blog/index');
-//                    }
-//                }
-//            }
-//        }
-
         if (TWIG_VIEW == 1)
         {
-            echo $twig->render('login.twig', ['user'=>UserModel::getById((int) $_GET['id'])]);
+            echo $twig->render('login.twig', ['user'=>UserModel::getById((int) $_GET['id']),'message'=>$message]);
         }
         else{
             return $this->view->render('User/register.phtml', ['user'=>UserModel::getById((int) $_GET['id'])]);
@@ -86,11 +62,14 @@ class User extends AbstractController
         $passwordRepeat = $_POST['password_repeat'];
         $success = true;
         $twig =  $this->view->getTwig();
+        $message = '';
         if(isset($_POST['email']))
         {
+
             if (!$name)
             {
                 $this->view->assign('error','Поля не могут быть пустыми!');
+                $message = 'Поля пустые!';
                 $success = false;
             }
 
@@ -105,24 +84,24 @@ class User extends AbstractController
                 $this->view->assign('error','Пароли не совпадают');
                 $success = false;
             }
-            $user1 = UserModel::getByEmail($email);
-            if ($user1)
-            {
-                $this->view->assign('error','Такой email уже зарегистрирован!');
-                $success = false;
-            }
+       //     $user1 = UserModel::getByEmail($email);
+//            if ($user1)
+//            {
+//                $this->view->assign('error','Такой email уже зарегистрирован!');
+//                $success = false;
+//            }
 
             if($success)
             {
-
-                UserModel::saveUser($name, $email, $password);
+                UserModel::saveUser();
+                $message = 'Регистрация успешна';
                 $this->redirect('/blog/index');
             }
         }
 
         if (TWIG_VIEW == 1)
         {
-            echo $twig->render('login.twig', ['user'=>UserModel::getById((int) $_GET['id'])]);
+            echo $twig->render('login.twig', ['user'=>UserModel::getById((int) $_GET['id']),'message'=>$message]);
         }
         else{
             return $this->view->render('User/register.phtml', ['user'=>UserModel::getById((int) $_GET['id'])]);
@@ -144,4 +123,7 @@ class User extends AbstractController
         $this->redirect('/user/login');
 
     }
+
+
+
 }
