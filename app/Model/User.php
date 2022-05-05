@@ -5,15 +5,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Capsule\Manager as DB;
 class User extends Model
 {
-
-
-
     protected $table = 'users';
     public $timestamps = false;
-  //  public $primaryKey = 'id';
-
-
-
 
     public static function getId($email)
     {
@@ -91,16 +84,6 @@ class User extends Model
         $db->save();
     }
 
-//    public function save()//сохраняем нового юзера
-//    {
-//        $db = Db::getInstance();
-//        $insert = "INSERT INTO users (`name`, `email`, `password`) VALUES (:name, :email, :password)";
-//        $db->exec($insert, __METHOD__, [':name'=>$this->name, ':email'=>$this->email, ':password'=>self::getPasswordHash($this->password)]);
-//        $id = $db->lastInsertId();
-//        $this->id = $id;
-//        return $id;
-//    }
-
     public static function getById($id)
     {
         Database::getConn();
@@ -108,7 +91,6 @@ class User extends Model
         foreach ($users as $user)
         {
             $data = $user->name;
-            //$data['password'] = $user->password;
         }
         if(!$users)
         {
@@ -118,17 +100,15 @@ class User extends Model
 
     }
 
-    public static function getStringNameById(int $id): string
+    public static function getUserById($id, $new_name, $new_email)
     {
-        $db = Db::getInstance();
-        $select = "SELECT name FROM users WHERE id = $id";
-        $data = $db->fetchOne($select, __METHOD__);
+        Database::getConn();
+        $user = User::find($id);
+        $user->name = $new_name;
+        $user->email = $new_email;
+        $user->save();
 
-        return $data['name'];
     }
-
-
-
 
     public static function getByEmail($email):string
     {
@@ -154,9 +134,7 @@ class User extends Model
             $data['email'] = $user->email;
         }
         return $data;
-
     }
-
 
     public static function getPasswordHash(string $password)
     {

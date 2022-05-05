@@ -1,3 +1,18 @@
-{{ result.name }}
-<br>
-{{ result.email }}
+Редактирование данных найденного пользователя
+<form action="/blog/change" method="post">
+
+
+ID пользователя: {{ result.id }}
+<br><br>
+Имя: {{ result.name }}____Новое имя:<input type="text" name="change_name"><br>
+<br><br>
+Email: {{ result.email }}____Новый Email:<input type="text" name="change_email"><br>
+<br><br>
+    <input type="submit" value="Внести изменения">
+</form>
+
+<br><br><br><br>
+
+<form method="POST" action="/blog/index">
+    <input type="submit"  value="Отмена" />
+</form>
