@@ -157,16 +157,10 @@ class User extends AbstractController
                 $success = false;
                 $message = 'Поля пустые!';
             }
-            //     $user1 = UserModel::getByEmail($email);
-//            if ($user1)
-//            {
-//                $this->view->assign('error','Такой email уже зарегистрирован!');
-//                $success = false;
-//            }
 
             if($success) {
                 UserModel::saveUser();
-                $message['error'] = 'Регистрация успешна';
+                $message = 'Регистрация успешна';
             }
             else{
                 $message = 'Поля пустые!';

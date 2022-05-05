@@ -90,7 +90,8 @@ class User extends Model
         $users = DB::table('users')->where('id','=',$id)->get();
         foreach ($users as $user)
         {
-            $data = $user->name;
+            $data['name'] = $user->name;
+            $data['email'] = $user->email;
         }
         if(!$users)
         {

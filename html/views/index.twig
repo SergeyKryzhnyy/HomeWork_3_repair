@@ -12,12 +12,12 @@
 
 <br><br><br><br><br><br>
 
-
 <form method="POST" action="/show/index">
     <input type="hidden" name="id"/>
     <input type="submit"  value="Смотреть всю ленту" />
 </form>
 <br><br><br><br>
+
 {% if id_status.id == 1 %}
     Добавить нового пользователя
     <form action="/user/register2" method="post">
@@ -28,7 +28,6 @@
     <input type="submit" value="Добавить пользователя">
 </form>
 
-
 <br><br><br><br>
 
     Редактирование данных пользователей
@@ -38,8 +37,6 @@
     </form>
     <br><br>
 
-
-
 {% endif %}
-
+{{ message }}
 {% include 'index2.twig' %}

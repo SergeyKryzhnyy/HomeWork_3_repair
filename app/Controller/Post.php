@@ -20,7 +20,6 @@ class Post extends AbstractController
 
         $user->savePost();
         $this->redirect('/show/index');
-        //return $this->view->render('User/register.phtml', ['user'=>UserModel::getById((int) $_GET['id'])]);
     }
 
 
